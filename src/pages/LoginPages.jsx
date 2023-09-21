@@ -20,14 +20,15 @@ const LoginPages = () => {
     }),
 
     onSubmit: (values) => {
-      try {
-        axios.post("https://reqres.in/api/login", values).then(() => {
+      axios
+        .post("https://reqres.in/api/login", values)
+        .then(() => {
           formik.resetForm();
           navigate("/category");
+        })
+        .catch(() => {
+          toast.error("Error! https://reqres.in/ saytinadan login olib tering");
         });
-      } catch (error) {
-        toast.error("Error");
-      }
     },
   });
   console.log(formik.errors);
