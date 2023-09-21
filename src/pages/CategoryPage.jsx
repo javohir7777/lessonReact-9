@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { requist } from "../server";
 import Card from "../container/card";
 import Search from "../container/search";
@@ -10,7 +10,9 @@ const CategoryPage = () => {
   const [category, setCategory] = useState([]);
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
 
+  console.log(search);
   const closeModal = () => setShow(false);
 
   const getCategory = async () => {
@@ -70,19 +72,35 @@ const CategoryPage = () => {
     }
   };
 
+  const handleSearch = useCallback((e) => {
+    setSearch(e.target.value);
+  }, []);
+
+  // const result=category.filter((ell)=>ell.name.toLowerCase().includes(search))
+
   return (
     <Fragment>
-      <Search category={category} openModal={openModal} />
+      <Search
+        category={category}
+        openModal={openModal}
+        handleSearch={handleSearch}
+      />
       <div className="container my-3">
         <div className="row g-3">
-          {category.map((category) => (
-            <Card
-              key={category.id}
-              {...category}
-              editData={editData}
-              deleteData={deleteData}
-            />
-          ))}
+          {category
+            .filter((ell) => {
+              return search.toLowerCase() === ""
+                ? ell
+                : ell.name.toLowerCase().includes(search);
+            })
+            .map((category) => (
+              <Card
+                key={category.id}
+                {...category}
+                editData={editData}
+                deleteData={deleteData}
+              />
+            ))}
         </div>
 
         <Modal show={show} onHide={closeModal}>
