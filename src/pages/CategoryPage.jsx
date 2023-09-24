@@ -11,8 +11,8 @@ const CategoryPage = () => {
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState([]);
 
-  console.log(search);
   const closeModal = () => setShow(false);
 
   const getCategory = async () => {
@@ -76,7 +76,10 @@ const CategoryPage = () => {
     setSearch(e.target.value);
   }, []);
 
-  // const result=category.filter((ell)=>ell.name.toLowerCase().includes(search))
+  const handleSort = () => {
+    setSort([...category].sort((a, b) => b.id - a.id));
+  };
+  console.log(sort);
 
   return (
     <Fragment>
@@ -86,6 +89,17 @@ const CategoryPage = () => {
         handleSearch={handleSearch}
       />
       <div className="container my-3">
+        <button className="btn btn-danger" onClick={handleSort}>
+          Sort
+        </button>
+        <select className="form-select">
+          <option value={category} onChange={getCategory}>
+            Default
+          </option>
+          <option value={sort}>
+            Sort
+          </option>
+        </select>
         <div className="row g-3">
           {category
             .filter((ell) => {
